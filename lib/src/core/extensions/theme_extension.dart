@@ -7,6 +7,5 @@ extension ThemeExtension on BuildContext {
 
   AppTypography get textTheme => theme.extension<AppTypography>()!;
 
-  AppThemeColors get colors =>
-      theme.extension<AppThemeColors>()!;
+  AppThemeColors get colors => theme.extension<AppThemeColors>()!;
 }
