@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 import '../../../../../../helpers/test_entities.dart';
 
 void main() {
@@ -9,6 +10,8 @@ void main() {
       final entityA = TestEntities.tTaskEntity;
       final entityB = TaskEntity(
         id: '2995104339',
+        status: TaskStatus.todo,
+
         content: 'Buy Milk',
         commentCount: 10,
         isCompleted: false,

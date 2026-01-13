@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 
 class TaskEntity extends Equatable {
   const TaskEntity({
     required this.timer,
+    required this.status,
     this.id,
     this.creatorId,
     this.createdAt,
@@ -24,6 +26,7 @@ class TaskEntity extends Equatable {
     this.url,
   });
   final TaskTimer timer;
+  final TaskStatus status;
   final String? id;
   final String? creatorId;
   final DateTime? createdAt;
@@ -46,6 +49,8 @@ class TaskEntity extends Equatable {
 
   @override
   List<Object?> get props => [
+    status,
+    timer,
     id,
     creatorId,
     createdAt,
@@ -69,6 +74,7 @@ class TaskEntity extends Equatable {
 
   TaskEntity copyWith({
     TaskTimer? timer,
+    TaskStatus? status,
     String? id,
     String? creatorId,
     DateTime? createdAt,
@@ -92,6 +98,7 @@ class TaskEntity extends Equatable {
     return TaskEntity(
       id: id ?? this.id,
       timer: timer ?? this.timer,
+      status: status ?? this.status,
       creatorId: creatorId ?? this.creatorId,
       createdAt: createdAt ?? this.createdAt,
       assigneeId: assigneeId ?? this.assigneeId,

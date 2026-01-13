@@ -5,11 +5,13 @@ class CreateCommentEntity extends Equatable {
     required this.taskId,
     required this.projectId,
     required this.content,
+    required this.id,
     this.attachment,
   });
   final String taskId;
   final String projectId;
   final String content;
+  final String id;
   final CreateCommentAttachment? attachment;
 
   @override
@@ -19,9 +21,11 @@ class CreateCommentEntity extends Equatable {
     String? taskId,
     String? projectId,
     String? content,
+    String? id,
     CreateCommentAttachment? attachment,
   }) {
     return CreateCommentEntity(
+      id: id ?? this.id,
       taskId: taskId ?? this.taskId,
       projectId: projectId ?? this.projectId,
       content: content ?? this.content,

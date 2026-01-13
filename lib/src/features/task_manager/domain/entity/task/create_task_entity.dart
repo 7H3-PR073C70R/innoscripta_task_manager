@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class CreateTaskEntity extends Equatable {
   const CreateTaskEntity({
+    required this.id,
     required this.content,
     required this.description,
     this.projectId,
@@ -19,6 +20,7 @@ class CreateTaskEntity extends Equatable {
     this.durationUnit,
     this.deadlineDate,
   });
+  final String id;
   final String content;
   final String description;
   final String? projectId;
@@ -57,6 +59,7 @@ class CreateTaskEntity extends Equatable {
   ];
 
   CreateTaskEntity copyWith({
+    String? id,
     String? content,
     String? description,
     String? projectId,
@@ -75,6 +78,7 @@ class CreateTaskEntity extends Equatable {
     DateTime? deadlineDate,
   }) {
     return CreateTaskEntity(
+      id: id ?? this.id,
       content: content ?? this.content,
       description: description ?? this.description,
       projectId: projectId ?? this.projectId,

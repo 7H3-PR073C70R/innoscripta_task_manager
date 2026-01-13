@@ -3,6 +3,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity_extension.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 
 void main() {
   group('task entity extension ...', () {
@@ -12,6 +13,7 @@ void main() {
       id: '1',
       content: 'test task',
       timer: tTaskTimer,
+      status: TaskStatus.todo,
     );
 
     test(

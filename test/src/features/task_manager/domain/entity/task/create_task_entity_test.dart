@@ -7,6 +7,7 @@ void main() {
       //! arrange
       final date = DateTime(2024);
       final entityA = CreateTaskEntity(
+        id: '2995104339',
         content: 'buy milk',
         description: 'low fat',
         labels: const ['groceries'],
@@ -14,6 +15,7 @@ void main() {
       );
 
       final entityB = CreateTaskEntity(
+        id: '2995104339',
         content: 'buy milk',
         description: 'low fat',
         labels: const ['groceries'],
@@ -27,6 +29,7 @@ void main() {
     test('copyWith should return a new object with updated values', () {
       //! arrange
       const entity = CreateTaskEntity(
+        id: '2995104339',
         content: 'old content',
         description: 'old description',
         priority: 1,
@@ -48,12 +51,14 @@ void main() {
     test('should support nested equality for list of labels', () {
       //! arrange
       const entity1 = CreateTaskEntity(
+        id: '2995104339',
         content: 'task',
         description: 'desc',
         labels: ['label1', 'label2'],
       );
 
       const entity2 = CreateTaskEntity(
+        id: '2995104339',
         content: 'task',
         description: 'desc',
         labels: ['label1', 'label2'],
@@ -67,6 +72,7 @@ void main() {
       //! arrange
       final date = DateTime(2024);
       final entity = CreateTaskEntity(
+        id: '2995104339',
         content: 'content',
         description: 'description',
         order: 1,

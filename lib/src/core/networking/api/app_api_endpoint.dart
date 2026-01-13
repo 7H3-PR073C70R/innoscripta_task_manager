@@ -6,7 +6,7 @@ import 'package:innoscripta_task_manager/src/core/constants/app_env.dart';
 /// Example
 ///
 /// static Uri authUrl =
-///  Uri(scheme: 'https', host: 'oxygen.com', path: '/api/v1/auth')
+///  Uri(scheme: 'https', host: 'example.com', path: '/api/v1/auth')
 class AppApiEndpoint {
   const AppApiEndpoint._();
 
@@ -16,4 +16,8 @@ class AppApiEndpoint {
   static const int sendTimeout = 50000;
 
   static String baseUri = '$scheme://$host//';
+  static const basePath = '/rest/v2/';
+  static const task = '${basePath}tasks';
+  static const comments = '${basePath}comments';
+  static const labels = '${basePath}labels';
 }

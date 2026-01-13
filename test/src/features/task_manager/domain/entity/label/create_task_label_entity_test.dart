@@ -7,6 +7,7 @@ void main() {
     test('should support value equality', () {
       //! arrange
       const entityA = CreateTaskLabelEntity(
+        id: '2995104339',
         name: 'shopping',
         order: 1,
         color: Colors.blue,
@@ -14,6 +15,7 @@ void main() {
       );
 
       const entityB = CreateTaskLabelEntity(
+        id: '2995104339',
         name: 'shopping',
         order: 1,
         color: Colors.blue,
@@ -27,6 +29,7 @@ void main() {
     test('copyWith should return a new object with updated values', () {
       //! arrange
       const entity = CreateTaskLabelEntity(
+        id: '2995104339',
         name: 'work',
         order: 2,
         color: Colors.red,
@@ -48,6 +51,7 @@ void main() {
     test('props should contain all fields', () {
       //! arrange
       const entity = CreateTaskLabelEntity(
+        id: '2995104339',
         name: 'urgent',
         order: 5,
         color: Colors.red,
