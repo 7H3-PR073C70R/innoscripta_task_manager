@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 
 extension MaterialColorExtension on Color {
-  
-    MaterialColor get toMaterialColor {
+  MaterialColor get toMaterialColor {
     final strengths = <double>[.05];
     final swatch = <int, Color>{};
     final r = red;
@@ -26,5 +25,4 @@ extension MaterialColorExtension on Color {
     }
     return MaterialColor(value, swatch);
   }
-  
 }

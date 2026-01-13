@@ -16,12 +16,11 @@ part 'use_case_locator.dart';
 final GetIt locator = GetIt.instance;
 
 Future<void> initLocator() async {
-  
   await Future.wait([
     _initExternal(),
-  _initClients(),
-  _initDataSource(),
-  _initServices(),
+    _initClients(),
+    _initDataSource(),
+    _initServices(),
     _initRepositoryLocator(),
     _initUseCaseLocator(),
   ]);

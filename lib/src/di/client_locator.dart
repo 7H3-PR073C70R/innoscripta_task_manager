@@ -1,3 +1,3 @@
 part of 'locator.dart';
 
-Future<void>  _initClients() async {}
+Future<void> _initClients() async {}
