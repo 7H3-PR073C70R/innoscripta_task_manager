@@ -1,6 +1,7 @@
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/comment/task_comment_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/task_label_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 
 class TestEntities {
   const TestEntities._();
@@ -40,6 +41,7 @@ class TestEntities {
   static final tTaskEntity = TaskEntity(
     id: '2995104339',
     content: 'Buy Milk',
+    status: TaskStatus.todo,
     commentCount: 10,
     isCompleted: false,
     createdAt: DateTime.parse('2019-12-11T22:36:50.000000Z'),
