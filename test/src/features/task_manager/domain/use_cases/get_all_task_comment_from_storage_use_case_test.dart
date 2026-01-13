@@ -3,7 +3,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:innoscripta_task_manager/src/core/error/failure.dart';
 import 'package:innoscripta_task_manager/src/core/utils/either.dart';
-import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/comment/get_comments_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/comment/task_comment_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/repositories/task_manager_repository.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/get_all_task_comment_from_storage_use_case.dart';
@@ -22,10 +21,7 @@ void main() {
     useCase = GetAllTaskCommentFromStorageUseCase(mockRepository);
   });
 
-  const tFilter = GetCommentsFilterEntity(
-    taskId: '2995104339',
-    projectId: '',
-  );
+  const tId = '2995104339';
 
   final tComments = [TestEntities.tCommentEntity];
 
@@ -34,13 +30,13 @@ void main() {
       'should call [getAllTaskCommentFromStorage] from repository with correct filter',
       () async {
         //! arrange
-        registerFallbackValue(tFilter);
+        registerFallbackValue(tId);
         when(
           () => mockRepository.getAllTaskCommentFromStorage(any()),
         ).thenAnswer((_) async => Right(tComments));
 
         //! act
-        final result = await useCase(tFilter);
+        final result = await useCase(tId);
 
         //! assert
         expect(
@@ -50,7 +46,7 @@ void main() {
               'Should return list of [TaskCommentEntity] from local storage',
         );
         verify(
-          () => mockRepository.getAllTaskCommentFromStorage(tFilter),
+          () => mockRepository.getAllTaskCommentFromStorage(tId),
         ).called(1);
         verifyNoMoreInteractions(mockRepository);
       },
@@ -64,7 +60,7 @@ void main() {
       ).thenAnswer((_) async => const Left(failure));
 
       //! act
-      final result = await useCase(tFilter);
+      final result = await useCase(tId);
 
       //! assert
       expect(
@@ -73,7 +69,7 @@ void main() {
         reason: 'Should propagate [CacheFailure] from repository',
       );
       verify(
-        () => mockRepository.getAllTaskCommentFromStorage(tFilter),
+        () => mockRepository.getAllTaskCommentFromStorage(tId),
       ).called(1);
     });
   });

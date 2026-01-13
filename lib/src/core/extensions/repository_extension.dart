@@ -131,6 +131,16 @@ extension RepositoryExtension<T> on Future<T> {
           message: e.errorMessage,
         ),
       );
+    } on CacheException catch (e, s) {
+      onFailure?.call();
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+      debugPrintStack();
+      return Left(
+        CacheFailure(
+          message: e.errorMessage,
+        ),
+      );
     } on Exception catch (e, s) {
       onFailure?.call();
       debugPrint(e.toString());

@@ -7,12 +7,14 @@ void main() {
     test('should support value equality', () {
       //! arrange
       final entityA = CreateCommentEntity(
+        id: TestEntities.tCommentEntity.id!,
         taskId: TestEntities.tCommentEntity.taskId!,
         projectId: TestEntities.tCommentEntity.projectId!,
         content: TestEntities.tCommentEntity.content!,
       );
 
       final entityB = CreateCommentEntity(
+        id: TestEntities.tCommentEntity.id!,
         taskId: TestEntities.tCommentEntity.taskId!,
         projectId: TestEntities.tCommentEntity.projectId!,
         content: TestEntities.tCommentEntity.content!,
@@ -26,6 +28,7 @@ void main() {
       //! arrange
       const originalAttachment = CreateCommentAttachment(fileName: 'old.pdf');
       const entity = CreateCommentEntity(
+        id: '2995104339',
         taskId: '1',
         projectId: 'A',
         content: 'Old Content',
@@ -57,6 +60,7 @@ void main() {
       );
 
       const entity1 = CreateCommentEntity(
+        id: '2995104339',
         taskId: '1',
         projectId: '1',
         content: 'test',
@@ -64,6 +68,7 @@ void main() {
       );
 
       const entity2 = CreateCommentEntity(
+        id: '2995104339',
         taskId: '1',
         projectId: '1',
         content: 'test',

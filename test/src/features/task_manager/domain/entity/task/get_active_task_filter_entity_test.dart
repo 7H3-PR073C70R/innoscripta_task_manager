@@ -1,7 +1,7 @@
 // ignore_for_file: lines_longer_than_80_chars, document_ignores
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/get_active_task_filter_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/get_active_task_filter_entity.dart';
 
 void main() {
   group('get active tasks filter entity ...', () {

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 
 class CreateTaskLabelEntity extends Equatable {
   const CreateTaskLabelEntity({
+    required this.id,
     required this.name,
     this.order,
     this.color,
     this.isFavorite,
   });
+  final String id;
   final String name;
   final num? order;
   final Color? color;
@@ -18,11 +20,13 @@ class CreateTaskLabelEntity extends Equatable {
 
   CreateTaskLabelEntity copyWith({
     String? name,
+    String? id,
     num? order,
     Color? color,
     bool? isFavorite,
   }) {
     return CreateTaskLabelEntity(
+      id: id ?? this.id,
       name: name ?? this.name,
       order: order ?? this.order,
       color: color ?? this.color,

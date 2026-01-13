@@ -3,8 +3,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:innoscripta_task_manager/src/core/error/failure.dart';
 import 'package:innoscripta_task_manager/src/core/utils/either.dart';
-import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/get_active_task_filter_entity.dart';
+import 'package:innoscripta_task_manager/src/core/utils/use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/task_label_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/get_active_task_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/repositories/task_manager_repository.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/get_all_task_label_from_storage_use_case.dart';
 import 'package:mocktail/mocktail.dart';
@@ -32,11 +33,11 @@ void main() {
         //! arrange
         registerFallbackValue(tFilter);
         when(
-          () => mockRepository.getAllTaskLabelFromStorage(any()),
+          () => mockRepository.getAllTaskLabelFromStorage(),
         ).thenAnswer((_) async => const Right(tLabels));
 
         //! act
-        final result = await useCase(tFilter);
+        final result = await useCase(const NoParams());
 
         //! assert
         expect(
@@ -45,7 +46,7 @@ void main() {
           reason: 'Should return list of [TaskLabelEntity] from storage',
         );
         verify(
-          () => mockRepository.getAllTaskLabelFromStorage(tFilter),
+          () => mockRepository.getAllTaskLabelFromStorage(),
         ).called(1);
         verifyNoMoreInteractions(mockRepository);
       },
@@ -55,11 +56,11 @@ void main() {
       //! arrange
       const failure = CacheFailure(message: 'no labels found in storage');
       when(
-        () => mockRepository.getAllTaskLabelFromStorage(any()),
+        () => mockRepository.getAllTaskLabelFromStorage(),
       ).thenAnswer((_) async => const Left(failure));
 
       //! act
-      final result = await useCase(tFilter);
+      final result = await useCase(const NoParams());
 
       //! assert
       expect(
@@ -68,7 +69,7 @@ void main() {
         reason: 'Should propagate the [CacheFailure] from the repository',
       );
       verify(
-        () => mockRepository.getAllTaskLabelFromStorage(tFilter),
+        () => mockRepository.getAllTaskLabelFromStorage(),
       ).called(1);
     });
   });
