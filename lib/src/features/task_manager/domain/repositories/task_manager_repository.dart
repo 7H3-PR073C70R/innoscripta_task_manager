@@ -4,9 +4,9 @@ import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/comment/get_comments_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/comment/task_comment_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/create_task_label_entity.dart';
-import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/get_active_task_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/task_label_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/create_task_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/get_active_task_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
 
 abstract interface class TaskManagerRepository {
@@ -34,9 +34,7 @@ abstract interface class TaskManagerRepository {
   //! Task-Label
   Future<Either<Failure, List<TaskLabelEntity>>> getAllTaskLabel();
 
-  Future<Either<Failure, List<TaskLabelEntity>>> getAllTaskLabelFromStorage(
-    GetActiveTasksFilterEntity request,
-  );
+  Future<Either<Failure, List<TaskLabelEntity>>> getAllTaskLabelFromStorage();
 
   Future<Either<Failure, void>> saveAllTaskLabelToStorage(
     List<TaskLabelEntity> request,
@@ -58,7 +56,7 @@ abstract interface class TaskManagerRepository {
   );
 
   Future<Either<Failure, List<TaskCommentEntity>>> getAllTaskCommentFromStorage(
-    GetCommentsFilterEntity request,
+    String id,
   );
 
   Future<Either<Failure, void>> saveAllTaskCommentToStorage({
