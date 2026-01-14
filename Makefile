@@ -15,3 +15,12 @@ watch:
 
 apk:
 	(flutter build apk --flavor production --target lib/main_production.dart)
+
+integration-dev:
+	(flutter drive --driver=integration_test/integration_driver.dart --target=integration_test/app_test.dart --flavor development)
+
+coverage:
+	(flutter test --coverage)
+
+coverage-html:
+	(genhtml coverage/lcov.info -o coverage/html && open coverage/html/index.html)

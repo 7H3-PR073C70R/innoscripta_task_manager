@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:innoscripta_task_manager/src/core/enums/environment.dart';
 import 'package:innoscripta_task_manager/src/di/locator.dart';
@@ -29,13 +30,13 @@ Future<void> bootstrap({
   required FutureOr<Widget> Function() builder,
   required Environment environment,
 }) async {
+  WidgetsFlutterBinding.ensureInitialized(); 
+  await ScreenUtil.ensureScreenSize(); 
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
   Bloc.observer = const AppBlocObserver();
-
-  WidgetsFlutterBinding.ensureInitialized();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
