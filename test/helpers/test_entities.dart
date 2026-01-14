@@ -1,5 +1,6 @@
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/comment/task_comment_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/label/task_label_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/create_task_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 
@@ -59,6 +60,12 @@ class TestEntities {
     color: 'charcoal',
     order: 1,
     isFavorite: false,
+  );
+
+  static const createTask = CreateTaskEntity(
+    id: 'id',
+    content: 'content',
+    description: 'description',
   );
 
   static final tCommentEntity = TaskCommentEntity(
