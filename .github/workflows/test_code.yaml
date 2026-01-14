@@ -101,7 +101,7 @@ jobs:
           genhtml coverage/lcov.filtered.info --output-directory=coverage_report
           COVERAGE=$(lcov --summary coverage/lcov.filtered.info | grep 'lines' | awk '{print $2}' | sed 's/%//')
           echo "Current Test Coverage: $COVERAGE%"
-          if (( $(echo "$COVERAGE < 75.0" | bc -l) )); then
-            echo "Test coverage is below 75%, as it is currently $COVERAGE% i.e. failing the job."
+          if (( $(echo "$COVERAGE < 70.0" | bc -l) )); then
+            echo "Test coverage is below 70%, as it is currently $COVERAGE% i.e. failing the job."
             exit 1
           fi

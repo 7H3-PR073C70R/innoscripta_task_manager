@@ -95,6 +95,14 @@ $ open coverage/index.html
 
 ---
 
+## Screen Record 🎥
+
+Below is a screen recording of the end-to-end integration test:
+
+![Integration Test Record](integration_test_record.mp4)
+
+---
+
 ## Feature Folder Structure
 ```
 │

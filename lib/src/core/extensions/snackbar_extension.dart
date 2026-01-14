@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:innoscripta_task_manager/src/core/constants/app_spacing.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/num_extension.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/theme_extension.dart';
 import 'package:innoscripta_task_manager/src/shared/widgets/animated_loader.dart';
@@ -20,7 +19,7 @@ extension BuildContextExtension on BuildContext {
           textStyle: TextStyle(
             fontSize: 12.fontSize,
             fontWeight: FontWeight.w500,
-            color: colors.gray.shade100,
+            color: colors.background,
           ),
           borderRadius: BorderRadius.circular(8.radius),
         ),
@@ -30,40 +29,19 @@ extension BuildContextExtension on BuildContext {
           textStyle: TextStyle(
             fontSize: 12.fontSize,
             fontWeight: FontWeight.w500,
-            color: colors.gray.shade100,
+            color: colors.background,
           ),
           borderRadius: BorderRadius.circular(8.radius),
         ),
-        SnackBarType.info => UnconstrainedBox(
-          child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 12.height,
-              horizontal: 16.width,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.radius),
-              color: colors.gray.shade900,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  message,
-                  style: textTheme.body.copyWith(
-                    fontSize: 12.fontSize,
-                    fontWeight: FontWeight.w500,
-                    color: colors.gray.shade100,
-                  ),
-                ),
-                AppSpacing.horizontalSpaceMedium,
-                // SvgImageAsset(
-                //   AppAssetPath.check,
-                //   height: 20.radius,
-                //   width: 20.radius,
-                // ),
-              ],
-            ),
+        SnackBarType.info => CustomSnackBar.info(
+          message: message,
+          backgroundColor: colors.gray,
+          textStyle: TextStyle(
+            fontSize: 12.fontSize,
+            fontWeight: FontWeight.w500,
+            color: colors.background,
           ),
+          borderRadius: BorderRadius.circular(8.radius),
         ),
       },
     );
