@@ -3,4 +3,5 @@ class PrefKeys {
   static const tasks = 'tasks_key';
   static const labels = 'labels_key';
   static const comments = 'comments_key';
+  static const token = 'token';
 }

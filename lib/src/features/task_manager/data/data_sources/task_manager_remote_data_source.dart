@@ -29,6 +29,10 @@ abstract interface class TaskManagerRemoteDataSource {
 
   Future<void> deleteTask(String id);
 
+  Future<void> closeTask(String id);
+
+  Future<void> reopenTask(String id);
+
   //! Task-Label
   Future<List<TaskLabelEntity>> getAllTaskLabel();
 
@@ -90,6 +94,16 @@ class TaskManagerRemoteDataSourceImpl implements TaskManagerRemoteDataSource {
   @override
   Future<void> deleteTask(String id) async {
     await _client.deleteTask(id);
+  }
+
+  @override
+  Future<void> closeTask(String id) async {
+    await _client.closeTask(id);
+  }
+
+  @override
+  Future<void> reopenTask(String id) async {
+    await _client.reopenTask(id);
   }
 
   //! Task-Label

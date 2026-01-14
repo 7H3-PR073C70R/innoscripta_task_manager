@@ -57,7 +57,7 @@ class TestEntities {
   static const tLabelEntity = TaskLabelEntity(
     id: '2156154810',
     name: 'Food',
-    color: 'charcoal',
+    color: 'berry_red',
     order: 1,
     isFavorite: false,
   );

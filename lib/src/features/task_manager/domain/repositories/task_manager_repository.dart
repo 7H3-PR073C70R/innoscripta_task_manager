@@ -31,6 +31,10 @@ abstract interface class TaskManagerRepository {
 
   Future<Either<Failure, void>> deleteTask(String id);
 
+  Future<Either<Failure, void>> closeTask(String id);
+
+  Future<Either<Failure, void>> reopenTask(String id);
+
   //! Task-Label
   Future<Either<Failure, List<TaskLabelEntity>>> getAllTaskLabel();
 
