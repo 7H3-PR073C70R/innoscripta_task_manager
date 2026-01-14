@@ -35,6 +35,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
+  integration_test:
+    sdk: flutter
   flutter_gen_runner: ^5.12.0
   very_good_analysis: ^10.0.0
   retrofit_generator: ^10.0.6

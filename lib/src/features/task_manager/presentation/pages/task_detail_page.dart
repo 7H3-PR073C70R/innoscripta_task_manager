@@ -34,6 +34,9 @@ class TaskDetailPage extends StatelessWidget {
           context.showSnackBar(
             message: appString.actionPerformedSuccessfully,
           );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            context.pop();
+          });
         }
       },
       builder: (context, state) {
