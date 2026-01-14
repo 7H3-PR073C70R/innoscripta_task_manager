@@ -14,6 +14,7 @@ Future<void> _initExternal() async {
             ..interceptors.addAll(
               [
                 LoggingInterceptor(logger: locator()),
+                TokenInterceptor(),
                 DataParserInterceptor(),
               ],
             ),

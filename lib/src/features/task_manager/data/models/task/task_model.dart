@@ -24,6 +24,7 @@ class TaskModel extends TaskEntity {
     super.sectionId,
     super.parentId,
     super.url,
+    super.completedAt,
   });
   factory TaskModel.fromEntity(TaskEntity entity) {
     return TaskModel(
@@ -48,6 +49,7 @@ class TaskModel extends TaskEntity {
       sectionId: entity.sectionId,
       parentId: entity.parentId,
       url: entity.url,
+      completedAt: entity.completedAt,
     );
   }
 
@@ -88,6 +90,9 @@ class TaskModel extends TaskEntity {
       sectionId: json['section_id'] as String?,
       parentId: json['parent_id'] as String?,
       url: json['url'] as String?,
+      completedAt: json['completed_at'] != null
+          ? DateTime.parse(json['completed_at'] as String)
+          : null,
     );
   }
 
@@ -118,6 +123,7 @@ class TaskModel extends TaskEntity {
       'section_id': sectionId,
       'parent_id': parentId,
       'url': url,
+      'completed_at': completedAt?.toIso8601String(),
     };
   }
 }

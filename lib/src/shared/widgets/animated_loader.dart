@@ -32,13 +32,17 @@ class _AnimatedLoaderState extends State<AnimatedLoader>
 
     _scaleAnimation = TweenSequence<double>([
       TweenSequenceItem(
-        tween: Tween(begin: 0.85, end: 1.5)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 0.85,
+          end: 1.5,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: 50,
       ),
       TweenSequenceItem(
-        tween: Tween(begin: 1.5, end: 0.85)
-            .chain(CurveTween(curve: Curves.easeInOut)),
+        tween: Tween(
+          begin: 1.5,
+          end: 0.85,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
         weight: 50,
       ),
     ]).animate(_controller);

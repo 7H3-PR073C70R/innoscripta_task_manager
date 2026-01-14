@@ -6,7 +6,7 @@ abstract class CommentEvent with _$CommentEvent {
     GetCommentsFilterEntity request,
   ) = _GetAllTaskComment;
   const factory CommentEvent.saveAllTaskCommentToStorage(
-   SaveAllTaskCommentToStorageParams request,
+    SaveAllTaskCommentToStorageParams request,
   ) = _SaveAllTaskCommentToStorage;
   const factory CommentEvent.createTaskComment(
     CreateCommentEntity request,

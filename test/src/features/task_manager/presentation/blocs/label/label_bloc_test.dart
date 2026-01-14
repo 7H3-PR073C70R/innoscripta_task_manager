@@ -2,7 +2,6 @@
 
 import 'package:bloc_test/bloc_test.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:innoscripta_task_manager/src/core/enums/view_state.dart';
 import 'package:innoscripta_task_manager/src/core/error/failure.dart';
@@ -104,6 +103,7 @@ void main() {
       blocTest<LabelBloc, LabelState>(
         'emits [processing, success, idle] when getAllTaskLabel succeeds',
         build: () {
+          //! Arrange
           when(
             () => mockGetAllTaskLabelUseCase(any()),
           ).thenAnswer((_) async => Right(tLabels));
@@ -112,7 +112,9 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return labelBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const LabelEvent.getAllTaskLabel()),
+        //! Assert
         expect: () => [
           const LabelState.initial(
             viewState: ViewState.processing,
@@ -140,6 +142,7 @@ void main() {
         'emits [processing, error, idle] and loads from storage when '
         'getAllTaskLabel fails',
         build: () {
+          //! Arrange
           when(() => mockGetAllTaskLabelUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Network error'),
@@ -150,7 +153,9 @@ void main() {
           ).thenAnswer((_) async => Right(tLabels));
           return labelBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const LabelEvent.getAllTaskLabel()),
+        //! Assert
         expect: () => [
           const LabelState.initial(
             viewState: ViewState.processing,
@@ -200,7 +205,7 @@ void main() {
       const tCreateLabelEntity = CreateTaskLabelEntity(
         id: '123',
         name: 'New Label',
-        color: Colors.blue,
+        color: 'sky_blue',
       );
       final tCreatedLabel = TestEntities.tLabelEntity.copyWith(
         id: '123',
@@ -210,6 +215,7 @@ void main() {
       blocTest<LabelBloc, LabelState>(
         'emits [processing, success, idle] when createTaskLabel succeeds',
         build: () {
+          //! Arrange
           when(
             () => mockCreateTaskLabelUseCase(any()),
           ).thenAnswer((_) async => Right(tCreatedLabel));
@@ -218,8 +224,10 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return labelBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const LabelEvent.createTaskLabel(tCreateLabelEntity)),
+        //! Assert
         expect: () => [
           const LabelState.initial(
             viewState: ViewState.idle,
@@ -250,6 +258,7 @@ void main() {
       blocTest<LabelBloc, LabelState>(
         'emits [processing, error, idle] when createTaskLabel fails',
         build: () {
+          //! Arrange
           when(() => mockCreateTaskLabelUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Creation failed'),
@@ -257,8 +266,10 @@ void main() {
           );
           return labelBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const LabelEvent.createTaskLabel(tCreateLabelEntity)),
+        //! Assert
         expect: () => [
           const LabelState.initial(
             viewState: ViewState.idle,
@@ -297,6 +308,7 @@ void main() {
         'emits [processing, success, idle] when updateTaskLabel succeeds',
         seed: () => const LabelState.initial(labels: [tExistingLabel]),
         build: () {
+          //! Arrange
           when(
             () => mockUpdateTaskLabelUseCase(any()),
           ).thenAnswer((_) async => Right(tUpdatedLabel));
@@ -305,8 +317,10 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return labelBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const LabelEvent.updateTaskLabel(tUpdateLabelEntity)),
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           const LabelState.initial(
@@ -339,6 +353,7 @@ void main() {
         'emits [processing, error, idle] when updateTaskLabel fails',
         seed: () => const LabelState.initial(labels: [tExistingLabel]),
         build: () {
+          //! Arrange
           when(() => mockUpdateTaskLabelUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Update failed'),
@@ -346,8 +361,10 @@ void main() {
           );
           return labelBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const LabelEvent.updateTaskLabel(tUpdateLabelEntity)),
+        //! Assert
         expect: () => [
           const LabelState.initial(
             viewState: ViewState.idle,
@@ -377,6 +394,7 @@ void main() {
         'does not emit new states when mutation already processing',
         seed: () => const LabelState.initial(labels: [tExistingLabel]),
         build: () {
+          //! Arrange
           when(
             () => mockUpdateTaskLabelUseCase(any()),
           ).thenAnswer((_) async => Right(tUpdatedLabel));
@@ -385,10 +403,13 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return labelBloc;
         },
+        //! Act
         act: (bloc) {
-          bloc..add(const LabelEvent.updateTaskLabel(tUpdateLabelEntity))
-          ..add(const LabelEvent.updateTaskLabel(tUpdateLabelEntity));
+          bloc
+            ..add(const LabelEvent.updateTaskLabel(tUpdateLabelEntity))
+            ..add(const LabelEvent.updateTaskLabel(tUpdateLabelEntity));
         },
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           const LabelState.initial(
@@ -423,6 +444,7 @@ void main() {
         'emits [processing, success, idle] when deleteTaskLabel succeeds',
         seed: () => const LabelState.initial(labels: [tLabel]),
         build: () {
+          //! Arrange
           when(
             () => mockDeleteTaskLabelUseCase(any()),
           ).thenAnswer((_) async => const Right(null));
@@ -431,7 +453,9 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return labelBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const LabelEvent.deleteTaskLabel(tLabelId)),
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           const LabelState.initial(
@@ -460,6 +484,7 @@ void main() {
         'emits [processing, error, idle] when deleteTaskLabel fails',
         seed: () => const LabelState.initial(labels: [tLabel]),
         build: () {
+          //! Arrange
           when(() => mockDeleteTaskLabelUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Deletion failed'),
@@ -467,7 +492,9 @@ void main() {
           );
           return labelBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const LabelEvent.deleteTaskLabel(tLabelId)),
+        //! Assert
         expect: () => [
           const LabelState.initial(
             viewState: ViewState.idle,
@@ -495,6 +522,7 @@ void main() {
         'does not emit new states when mutation already processing',
         seed: () => const LabelState.initial(labels: [tLabel]),
         build: () {
+          //! Arrange
           when(
             () => mockDeleteTaskLabelUseCase(any()),
           ).thenAnswer((_) async => const Right(null));
@@ -503,10 +531,13 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return labelBloc;
         },
+        //! Act
         act: (bloc) {
-          bloc..add(const LabelEvent.deleteTaskLabel(tLabelId))
-          ..add(const LabelEvent.deleteTaskLabel(tLabelId));
+          bloc
+            ..add(const LabelEvent.deleteTaskLabel(tLabelId))
+            ..add(const LabelEvent.deleteTaskLabel(tLabelId));
         },
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           const LabelState.initial(

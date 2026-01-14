@@ -9,16 +9,18 @@ import 'package:innoscripta_task_manager/src/di/locator.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/create_task_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/get_active_task_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/close_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/create_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/delete_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/get_all_active_task_from_storage_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/get_all_active_task_use_case.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/reopen_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/save_all_task_to_storage_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/update_task_use_case.dart';
 
+part 'task_bloc.freezed.dart';
 part 'task_event.dart';
 part 'task_state.dart';
-part 'task_bloc.freezed.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
   TaskBloc({
@@ -28,6 +30,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     CreateTaskUseCase? createTaskUseCase,
     UpdateTaskUseCase? updateTaskUseCase,
     DeleteTaskUseCase? deleteUseCase,
+    CloseTaskUseCase? closeTaskUseCase,
+    ReopenTaskUseCase? reopenTaskUseCase,
   }) : _getAllActiveTaskUseCase = getAllActiveTaskUseCase ?? locator(),
        _getAllActiveTaskFromStorageUseCase =
            getAllActiveTaskFromStorageUseCase ?? locator(),
@@ -35,12 +39,17 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
        _createTaskUseCase = createTaskUseCase ?? locator(),
        _updateTaskUseCase = updateTaskUseCase ?? locator(),
        _deleteTaskUseCase = deleteUseCase ?? locator(),
+       _closeTaskUseCase = closeTaskUseCase ?? locator(),
+       _reopenTaskUseCase = reopenTaskUseCase ?? locator(),
        super(const _Initial()) {
     on<_GetAllActiveTask>(_onGetAllActiveTask);
     on<_SaveAllTaskToStorage>(_onSaveAllTaskToStorage);
     on<_CreateTask>(_onCreateTask);
     on<_UpdateTask>(_onUpdateTask);
     on<_DeleteTask>(_onDeleteTask);
+    on<_UpdateTaskLocally>(_onUpdateTaskLocally);
+    on<_CloseTask>(_onCloseTask);
+    on<_ReopenTask>(_onReopenTask);
   }
 
   final GetAllActiveTaskUseCase _getAllActiveTaskUseCase;
@@ -49,6 +58,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final CreateTaskUseCase _createTaskUseCase;
   final UpdateTaskUseCase _updateTaskUseCase;
   final DeleteTaskUseCase _deleteTaskUseCase;
+  final CloseTaskUseCase _closeTaskUseCase;
+  final ReopenTaskUseCase _reopenTaskUseCase;
 
   FutureOr<void> _onGetAllActiveTask(
     _GetAllActiveTask event,
@@ -198,6 +209,114 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     );
 
     emit(state.copyWith(mutationState: ViewState.idle, errorMessage: null));
+  }
+
+  FutureOr<void> _onCloseTask(
+    _CloseTask event,
+    Emitter<TaskState> emit,
+  ) async {
+    if (state.mutationState.isProcessing) return;
+
+    emit(state.copyWith(mutationState: ViewState.processing));
+
+    final result = await _closeTaskUseCase(event.id);
+
+    await result.fold(
+      (error) async => emit(
+        state.copyWith(
+          mutationState: ViewState.error,
+          errorMessage: error.message,
+        ),
+      ),
+      (_) async {
+        // Update task status locally to isCompleted: true
+        final taskIndex = state.tasks.indexWhere((t) => t.id == event.id);
+        if (taskIndex != -1) {
+          final updatedTask = state.tasks[taskIndex].copyWith(
+            isCompleted: true,
+            completedAt: DateTime.now(),
+          );
+          final updatedTasks = [...state.tasks];
+          updatedTasks[taskIndex] = updatedTask;
+
+          add(_SaveAllTaskToStorage(updatedTasks));
+
+          emit(
+            state.copyWith(
+              mutationState: ViewState.success,
+              tasks: updatedTasks,
+            ),
+          );
+        } else {
+          emit(state.copyWith(mutationState: ViewState.success));
+        }
+      },
+    );
+
+    emit(state.copyWith(mutationState: ViewState.idle, errorMessage: null));
+  }
+
+  FutureOr<void> _onReopenTask(
+    _ReopenTask event,
+    Emitter<TaskState> emit,
+  ) async {
+    if (state.mutationState.isProcessing) return;
+
+    emit(state.copyWith(mutationState: ViewState.processing));
+
+    final result = await _reopenTaskUseCase(event.id);
+
+    await result.fold(
+      (error) async => emit(
+        state.copyWith(
+          mutationState: ViewState.error,
+          errorMessage: error.message,
+        ),
+      ),
+      (_) async {
+        // Update task status locally to isCompleted: false
+        final taskIndex = state.tasks.indexWhere((t) => t.id == event.id);
+        if (taskIndex != -1) {
+          final updatedTask = state.tasks[taskIndex].copyWith(
+            isCompleted: false,
+            clearCompletedAt: true,
+          );
+          final updatedTasks = [...state.tasks];
+          updatedTasks[taskIndex] = updatedTask;
+
+          add(_SaveAllTaskToStorage(updatedTasks));
+
+          emit(
+            state.copyWith(
+              mutationState: ViewState.success,
+              tasks: updatedTasks,
+            ),
+          );
+        } else {
+          emit(state.copyWith(mutationState: ViewState.success));
+        }
+      },
+    );
+
+    emit(state.copyWith(mutationState: ViewState.idle, errorMessage: null));
+  }
+
+  FutureOr<void> _onUpdateTaskLocally(
+    _UpdateTaskLocally event,
+    Emitter<TaskState> emit,
+  ) async {
+    final updatedTasks = await compute(_updateListWithTask, {
+      'tasks': [...state.tasks],
+      'updatedTask': event.task,
+    });
+
+    add(_SaveAllTaskToStorage(updatedTasks));
+
+    emit(
+      state.copyWith(
+        tasks: updatedTasks,
+      ),
+    );
   }
 
   Future<List<TaskEntity>> _fetchAllTasksFromStorage() async {

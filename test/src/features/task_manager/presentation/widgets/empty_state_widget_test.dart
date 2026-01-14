@@ -4,7 +4,6 @@ import 'package:innoscripta_task_manager/src/features/task_manager/presentation/
 
 import '../../../../../helpers/pump_app.dart';
 
-
 void main() {
   group('empty state widget ...', () {
     testWidgets('renders title and description correctly', (tester) async {

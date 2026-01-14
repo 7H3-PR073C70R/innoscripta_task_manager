@@ -9,8 +9,6 @@ import 'package:mocktail/mocktail.dart';
 import '../../../../../helpers/mocks.dart';
 import '../../../../../helpers/pump_app.dart';
 
-
-
 void main() {
   late MockLabelBloc mockLabelBloc;
 
