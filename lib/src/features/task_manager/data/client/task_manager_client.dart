@@ -37,6 +37,12 @@ abstract class TaskManagerClient {
   @DELETE('${AppApiEndpoint.task}/{id}')
   Future<void> deleteTask(@Path('id') String id);
 
+  @POST('${AppApiEndpoint.task}/{id}/close')
+  Future<void> closeTask(@Path('id') String id);
+
+  @POST('${AppApiEndpoint.task}/{id}/reopen')
+  Future<void> reopenTask(@Path('id') String id);
+
   //! Task-Label
   @GET(AppApiEndpoint.labels)
   Future<List<TaskLabelModel>> getAllTaskLabel();

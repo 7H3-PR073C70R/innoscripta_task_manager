@@ -8,7 +8,7 @@ void main() {
       const entityA = TaskLabelEntity(
         id: '1',
         name: 'urgent',
-        color: 'red',
+        color: 'berry_red',
         order: 1,
         isFavorite: true,
       );
@@ -16,7 +16,7 @@ void main() {
       const entityB = TaskLabelEntity(
         id: '1',
         name: 'urgent',
-        color: 'red',
+        color: 'berry_red',
         order: 1,
         isFavorite: true,
       );
@@ -52,7 +52,7 @@ void main() {
       const entity = TaskLabelEntity(
         id: 'label_id',
         name: 'shopping',
-        color: 'blue',
+        color: 'sky_blue',
         order: 10,
         isFavorite: false,
       );
@@ -60,7 +60,7 @@ void main() {
       //! assert
       expect(
         entity.props,
-        containsAll(['label_id', 'shopping', 'blue', 10, false]),
+        containsAll(['label_id', 'shopping', 'sky_blue', 10, false]),
       );
     });
   });

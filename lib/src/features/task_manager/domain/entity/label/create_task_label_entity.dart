@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 
 class CreateTaskLabelEntity extends Equatable {
   const CreateTaskLabelEntity({
@@ -12,7 +11,7 @@ class CreateTaskLabelEntity extends Equatable {
   final String id;
   final String name;
   final num? order;
-  final Color? color;
+  final String? color;
   final bool? isFavorite;
 
   @override
@@ -22,7 +21,7 @@ class CreateTaskLabelEntity extends Equatable {
     String? name,
     String? id,
     num? order,
-    Color? color,
+    String? color,
     bool? isFavorite,
   }) {
     return CreateTaskLabelEntity(

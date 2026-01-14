@@ -119,6 +119,7 @@ void main() {
         'emits [processing, error, idle] and loads from storage when '
         'getAllTaskComment fails',
         build: () {
+          //! Arrange
           when(() => mockGetAllTaskCommentUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Network error'),
@@ -129,8 +130,10 @@ void main() {
           ).thenAnswer((_) async => Right(tComments));
           return commentBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const CommentEvent.getAllTaskComment(tFilterEntity)),
+        //! Assert
         expect: () => [
           const CommentState.initial(
             viewState: ViewState.processing,
@@ -169,6 +172,7 @@ void main() {
       blocTest<CommentBloc, CommentState>(
         'emits [processing, error, idle] when createTaskComment fails',
         build: () {
+          //! Arrange
           when(() => mockCreateTaskCommentUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Creation failed'),
@@ -176,9 +180,11 @@ void main() {
           );
           return commentBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(
           const CommentEvent.createTaskComment(tCreateCommentEntity),
         ),
+        //! Assert
         expect: () => [
           const CommentState.initial(
             viewState: ViewState.idle,
@@ -218,6 +224,7 @@ void main() {
         'emits [processing, error, idle] when updateTaskComment fails',
         seed: () => CommentState.initial(comments: [tExistingComment]),
         build: () {
+          //! Arrange
           when(() => mockUpdateTaskCommentUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Update failed'),
@@ -225,9 +232,11 @@ void main() {
           );
           return commentBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(
           const CommentEvent.updateTaskComment(tUpdateCommentEntity),
         ),
+        //! Assert
         expect: () => [
           CommentState.initial(
             viewState: ViewState.idle,
@@ -262,6 +271,7 @@ void main() {
         'emits [processing, error, idle] when deleteTaskComment fails',
         seed: () => CommentState.initial(comments: [tComment]),
         build: () {
+          //! Arrange
           when(() => mockDeleteTaskCommentUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Deletion failed'),
@@ -269,8 +279,10 @@ void main() {
           );
           return commentBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const CommentEvent.deleteTaskComment(tCommentId)),
+        //! Assert
         expect: () => [
           CommentState.initial(
             viewState: ViewState.idle,
