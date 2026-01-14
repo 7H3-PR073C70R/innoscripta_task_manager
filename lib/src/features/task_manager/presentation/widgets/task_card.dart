@@ -8,7 +8,6 @@ import 'package:innoscripta_task_manager/src/features/task_manager/presentation/
 import 'package:innoscripta_task_manager/src/l10n/l10n.dart';
 import 'package:intl/intl.dart';
 
-
 class TaskCard extends StatefulWidget {
   const TaskCard({
     required this.task,

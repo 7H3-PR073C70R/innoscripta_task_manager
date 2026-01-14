@@ -30,19 +30,34 @@ class TaskManagerRepositoryImpl implements TaskManagerRepository {
     List<TaskEntity> remoteTasks,
     List<TaskEntity> localTasks,
   ) {
-    return remoteTasks.map((remoteTask) {
-      // Find matching local task to extract Timer and Status
-      final localMatch = localTasks.cast<TaskEntity?>().firstWhere(
-        (local) => local?.id == remoteTask.id,
-        orElse: () => null,
-      );
+    final remoteMap = {for (final task in remoteTasks) task.id: task};
+    final localMap = {for (final task in localTasks) task.id: task};
 
-      if (localMatch == null) return remoteTask;
+    // Use a LinkedHashSet to maintain order if possible, though ids are keys.
+    // We want to return all remote tasks (hydrated)
+    // + any local tasks that aren't in remote.
+    final allIds = <String?>{
+      ...remoteTasks.map((e) => e.id),
+      ...localTasks.map((e) => e.id),
+    };
 
-      return remoteTask.copyWith(
-        timer: localMatch.timer,
-        status: localMatch.status,
-      );
+    return allIds.map((id) {
+      final remoteMatch = remoteMap[id];
+      final localMatch = localMap[id];
+
+      if (remoteMatch != null && localMatch != null) {
+        // Hydrate remote task with local timer/status (local is source of truth for timer and isCompleted)
+        return remoteMatch.copyWith(
+          timer: localMatch.timer,
+          status: localMatch.status,
+          isCompleted: localMatch.isCompleted,
+        );
+      }
+
+      if (remoteMatch != null) return remoteMatch;
+
+      // If it's only in local, it might be a closed task or something new.
+      return localMatch!;
     }).toList();
   }
 
@@ -51,24 +66,26 @@ class TaskManagerRepositoryImpl implements TaskManagerRepository {
   Future<Either<Failure, List<TaskEntity>>> getAllActiveTask(
     GetActiveTasksFilterEntity request,
   ) async {
-    return _remoteDataSource
+    final response = await _remoteDataSource
         .getAllActiveTask(request)
-        .makeRequest(
-          onSuccess: (remoteTasks) async {
-            final localTasks = await _localDataSource
-                .getAllActiveTaskFromStorage();
+        .makeRequest();
 
-            // Offload the heavy merging logic to a separate Isolate
-            final hydratedTasks = await Isolate.run(() {
-              return _hydrateTasks(remoteTasks, localTasks);
-            });
+    if (response.isRight) {
+      final remoteTasks = response.fold(
+        (_) => <TaskEntity>[],
+        (tasks) => tasks,
+      );
+      final localTasks = await _localDataSource.getAllActiveTaskFromStorage();
 
-            // Update the list with hydrated data
-            remoteTasks
-              ..clear()
-              ..addAll(hydratedTasks);
-          },
-        );
+      // Offload the heavy merging logic to a separate Isolate
+      final hydratedTasks = await Isolate.run(() {
+        return _hydrateTasks(remoteTasks, localTasks);
+      });
+
+      // return hydratedTasks
+      return Right(hydratedTasks.toList());
+    }
+    return response;
   }
 
   @override
@@ -86,6 +103,16 @@ class TaskManagerRepositoryImpl implements TaskManagerRepository {
   @override
   Future<Either<Failure, void>> deleteTask(String id) {
     return _remoteDataSource.deleteTask(id).makeRequest();
+  }
+
+  @override
+  Future<Either<Failure, void>> closeTask(String id) {
+    return _remoteDataSource.closeTask(id).makeRequest();
+  }
+
+  @override
+  Future<Either<Failure, void>> reopenTask(String id) {
+    return _remoteDataSource.reopenTask(id).makeRequest();
   }
 
   //! Task-Label

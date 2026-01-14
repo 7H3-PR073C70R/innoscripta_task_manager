@@ -24,6 +24,7 @@ class TaskEntity extends Equatable {
     this.sectionId,
     this.parentId,
     this.url,
+    this.completedAt,
   });
   final TaskTimer timer;
   final TaskStatus status;
@@ -46,6 +47,7 @@ class TaskEntity extends Equatable {
   final String? sectionId;
   final String? parentId;
   final String? url;
+  final DateTime? completedAt;
 
   @override
   List<Object?> get props => [
@@ -70,6 +72,7 @@ class TaskEntity extends Equatable {
     sectionId,
     parentId,
     url,
+    completedAt,
   ];
 
   TaskEntity copyWith({
@@ -94,6 +97,8 @@ class TaskEntity extends Equatable {
     String? sectionId,
     String? parentId,
     String? url,
+    DateTime? completedAt,
+    bool clearCompletedAt = false,
   }) {
     return TaskEntity(
       id: id ?? this.id,
@@ -117,6 +122,7 @@ class TaskEntity extends Equatable {
       sectionId: sectionId ?? this.sectionId,
       parentId: parentId ?? this.parentId,
       url: url ?? this.url,
+      completedAt: clearCompletedAt ? null : (completedAt ?? this.completedAt),
     );
   }
 }

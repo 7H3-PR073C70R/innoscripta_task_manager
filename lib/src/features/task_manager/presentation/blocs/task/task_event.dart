@@ -15,4 +15,15 @@ abstract class TaskEvent with _$TaskEvent {
   const factory TaskEvent.deleteTask(
     String id,
   ) = _DeleteTask;
+  const factory TaskEvent.updateTaskLocally(
+    TaskEntity task,
+  ) = _UpdateTaskLocally;
+
+  const factory TaskEvent.closeTask(
+    String id,
+  ) = _CloseTask;
+
+  const factory TaskEvent.reopenTask(
+    String id,
+  ) = _ReopenTask;
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:innoscripta_task_manager/src/core/constants/app_spacing.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/num_extension.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/theme_extension.dart';
+import 'package:innoscripta_task_manager/src/shared/widgets/animated_loader.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -64,6 +65,22 @@ extension BuildContextExtension on BuildContext {
             ),
           ),
         ),
+      },
+    );
+  }
+
+  Future<void> showLoadingModal() {
+    return showDialog<void>(
+      context: this,
+      barrierDismissible: false,
+      barrierColor: Colors.transparent,
+      builder: (context) {
+        return const Center(
+          child: Material(
+            color: Colors.transparent,
+            child: AnimatedLoader(isBig: true),
+          ),
+        );
       },
     );
   }

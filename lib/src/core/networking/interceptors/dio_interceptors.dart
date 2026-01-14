@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:innoscripta_task_manager/src/core/constants/app_env.dart';
 import 'package:logger/logger.dart';
 
 class LoggingInterceptor extends Interceptor {
@@ -44,6 +45,16 @@ class LoggingInterceptor extends Interceptor {
   }
 }
 
+class TokenInterceptor extends Interceptor {
+  TokenInterceptor();
+
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.headers['Authorization'] = 'Bearer ${AppEnv.apiToken}';
+    super.onRequest(options, handler);
+  }
+}
+
 class DataParserInterceptor extends Interceptor {
   DataParserInterceptor();
 
@@ -56,7 +67,7 @@ class DataParserInterceptor extends Interceptor {
     try {
       modifiedResponse = Response<dynamic>(
         requestOptions: response.requestOptions,
-        data: (response.data as Map<String, dynamic>)['data'],
+        data: response.data,
         statusCode: response.statusCode,
         extra: response.extra,
         headers: response.headers,

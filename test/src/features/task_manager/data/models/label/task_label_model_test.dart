@@ -6,14 +6,14 @@ void main() {
   group('task label model ...', () {
     const tId = 'label_1';
     const tName = 'work';
-    const tColor = '0xff00ff00';
+    const tColor = 'berry_red';
     const tOrder = 10;
     const tIsFavorite = true;
 
     const tJson = {
       'id': tId,
       'name': tName,
-      'color': tColor,
+      'color': 'berry_red',
       'order': tOrder,
       'is_favorite': tIsFavorite,
     };

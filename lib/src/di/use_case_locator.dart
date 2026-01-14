@@ -11,6 +11,8 @@ Future<void> _initUseCaseLocator() async {
     ..registerLazySingleton(() => CreateTaskUseCase(locator()))
     ..registerLazySingleton(() => UpdateTaskUseCase(locator()))
     ..registerLazySingleton(() => DeleteTaskUseCase(locator()))
+    ..registerLazySingleton(() => CloseTaskUseCase(locator()))
+    ..registerLazySingleton(() => ReopenTaskUseCase(locator()))
     //! --- Task-Label Use Cases ---
     ..registerLazySingleton(() => GetAllTaskLabelUseCase(locator()))
     ..registerLazySingleton(

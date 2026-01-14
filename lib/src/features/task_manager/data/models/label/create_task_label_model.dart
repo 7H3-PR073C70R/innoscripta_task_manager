@@ -23,8 +23,7 @@ class CreateTaskLabelModel extends CreateTaskLabelEntity {
     return {
       'name': name,
       if (order != null) 'order': order,
-      if (color != null)
-        'color': '0x${color!.toARGB32().toRadixString(16).padLeft(8, '0')}',
+      if (color != null) 'color': color,
       if (isFavorite != null) 'is_favorite': isFavorite,
     };
   }

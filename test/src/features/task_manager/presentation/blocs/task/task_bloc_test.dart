@@ -9,10 +9,12 @@ import 'package:innoscripta_task_manager/src/core/utils/use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/create_task_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/get_active_task_filter_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/close_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/create_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/delete_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/get_all_active_task_from_storage_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/get_all_active_task_use_case.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/reopen_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/save_all_task_to_storage_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/use_cases/update_task_use_case.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/presentation/blocs/task/task_bloc.dart';
@@ -36,6 +38,10 @@ class MockUpdateTaskUseCase extends Mock implements UpdateTaskUseCase {}
 
 class MockDeleteTaskUseCase extends Mock implements DeleteTaskUseCase {}
 
+class MockCloseTaskUseCase extends Mock implements CloseTaskUseCase {}
+
+class MockReopenTaskUseCase extends Mock implements ReopenTaskUseCase {}
+
 void main() {
   late TaskBloc taskBloc;
   late MockGetAllActiveTaskUseCase mockGetAllActiveTaskUseCase;
@@ -45,6 +51,8 @@ void main() {
   late MockCreateTaskUseCase mockCreateTaskUseCase;
   late MockUpdateTaskUseCase mockUpdateTaskUseCase;
   late MockDeleteTaskUseCase mockDeleteTaskUseCase;
+  late MockCloseTaskUseCase mockCloseTaskUseCase;
+  late MockReopenTaskUseCase mockReopenTaskUseCase;
 
   setUp(() {
     mockGetAllActiveTaskUseCase = MockGetAllActiveTaskUseCase();
@@ -54,6 +62,8 @@ void main() {
     mockCreateTaskUseCase = MockCreateTaskUseCase();
     mockUpdateTaskUseCase = MockUpdateTaskUseCase();
     mockDeleteTaskUseCase = MockDeleteTaskUseCase();
+    mockCloseTaskUseCase = MockCloseTaskUseCase();
+    mockReopenTaskUseCase = MockReopenTaskUseCase();
 
     taskBloc = TaskBloc(
       getAllActiveTaskUseCase: mockGetAllActiveTaskUseCase,
@@ -63,6 +73,8 @@ void main() {
       createTaskUseCase: mockCreateTaskUseCase,
       updateTaskUseCase: mockUpdateTaskUseCase,
       deleteUseCase: mockDeleteTaskUseCase,
+      closeTaskUseCase: mockCloseTaskUseCase,
+      reopenTaskUseCase: mockReopenTaskUseCase,
     );
 
     // Register fallback values
@@ -103,6 +115,7 @@ void main() {
       blocTest<TaskBloc, TaskState>(
         'emits [processing, success, idle] when getAllActiveTask succeeds',
         build: () {
+          //! Arrange
           when(
             () => mockGetAllActiveTaskUseCase(any()),
           ).thenAnswer((_) async => Right(tTasks));
@@ -111,8 +124,10 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return taskBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const TaskEvent.getAllActiveTask(tFilterEntity)),
+        //! Assert
         expect: () => [
           const TaskState.initial(
             viewState: ViewState.processing,
@@ -140,6 +155,7 @@ void main() {
         'emits [processing, error, idle] and loads from storage when '
         'getAllActiveTask fails',
         build: () {
+          //! Arrange
           when(() => mockGetAllActiveTaskUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Network error'),
@@ -150,8 +166,10 @@ void main() {
           ).thenAnswer((_) async => Right(tTasks));
           return taskBloc;
         },
+        //! Act
         act: (bloc) =>
             bloc.add(const TaskEvent.getAllActiveTask(tFilterEntity)),
+        //! Assert
         expect: () => [
           const TaskState.initial(
             viewState: ViewState.processing,
@@ -212,6 +230,7 @@ void main() {
       blocTest<TaskBloc, TaskState>(
         'emits [processing, success, idle] when createTask succeeds',
         build: () {
+          //! Arrange
           when(
             () => mockCreateTaskUseCase(any()),
           ).thenAnswer((_) async => Right(tCreatedTask));
@@ -220,7 +239,9 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return taskBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const TaskEvent.createTask(tCreateTaskEntity)),
+        //! Assert
         expect: () => [
           const TaskState.initial(
             viewState: ViewState.idle,
@@ -249,6 +270,7 @@ void main() {
       blocTest<TaskBloc, TaskState>(
         'emits [processing, error, idle] when createTask fails',
         build: () {
+          //! Arrange
           when(() => mockCreateTaskUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Creation failed'),
@@ -256,7 +278,9 @@ void main() {
           );
           return taskBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const TaskEvent.createTask(tCreateTaskEntity)),
+        //! Assert
         expect: () => [
           const TaskState.initial(
             viewState: ViewState.idle,
@@ -295,6 +319,7 @@ void main() {
         'emits [processing, success, idle] when updateTask succeeds',
         seed: () => TaskState.initial(tasks: [tExistingTask]),
         build: () {
+          //! Arrange
           when(
             () => mockUpdateTaskUseCase(any()),
           ).thenAnswer((_) async => Right(tUpdatedTask));
@@ -303,7 +328,9 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return taskBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(TaskEvent.updateTask(tUpdateTaskEntity)),
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           TaskState.initial(
@@ -334,6 +361,7 @@ void main() {
         'emits [processing, error, idle] when updateTask fails',
         seed: () => TaskState.initial(tasks: [tExistingTask]),
         build: () {
+          //! Arrange
           when(() => mockUpdateTaskUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Update failed'),
@@ -341,7 +369,9 @@ void main() {
           );
           return taskBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(TaskEvent.updateTask(tUpdateTaskEntity)),
+        //! Assert
         expect: () => [
           TaskState.initial(
             viewState: ViewState.idle,
@@ -369,6 +399,7 @@ void main() {
         'does not emit new states when mutation already processing',
         seed: () => TaskState.initial(tasks: [tExistingTask]),
         build: () {
+          //! Arrange
           when(
             () => mockUpdateTaskUseCase(any()),
           ).thenAnswer((_) async => Right(tUpdatedTask));
@@ -377,11 +408,13 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return taskBloc;
         },
+        //! Act
         act: (bloc) {
           bloc
             ..add(TaskEvent.updateTask(tUpdateTaskEntity))
             ..add(TaskEvent.updateTask(tUpdateTaskEntity));
         },
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           TaskState.initial(
@@ -414,6 +447,7 @@ void main() {
         'emits [processing, success, idle] when deleteTask succeeds',
         seed: () => TaskState.initial(tasks: [tTask]),
         build: () {
+          //! Arrange
           when(
             () => mockDeleteTaskUseCase(any()),
           ).thenAnswer((_) async => const Right(null));
@@ -422,7 +456,9 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return taskBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const TaskEvent.deleteTask(tTaskId)),
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           TaskState.initial(
@@ -451,6 +487,7 @@ void main() {
         'emits [processing, error, idle] when deleteTask fails',
         seed: () => TaskState.initial(tasks: [tTask]),
         build: () {
+          //! Arrange
           when(() => mockDeleteTaskUseCase(any())).thenAnswer(
             (_) async => const Left(
               ServerFailure(message: 'Deletion failed'),
@@ -458,7 +495,9 @@ void main() {
           );
           return taskBloc;
         },
+        //! Act
         act: (bloc) => bloc.add(const TaskEvent.deleteTask(tTaskId)),
+        //! Assert
         expect: () => [
           TaskState.initial(
             viewState: ViewState.idle,
@@ -486,6 +525,7 @@ void main() {
         'does not emit new states when mutation already processing',
         seed: () => TaskState.initial(tasks: [tTask]),
         build: () {
+          //! Arrange
           when(
             () => mockDeleteTaskUseCase(any()),
           ).thenAnswer((_) async => const Right(null));
@@ -494,10 +534,13 @@ void main() {
           ).thenAnswer((_) async => const Right(null));
           return taskBloc;
         },
+        //! Act
         act: (bloc) {
-          bloc..add(const TaskEvent.deleteTask(tTaskId))
-          ..add(const TaskEvent.deleteTask(tTaskId));
+          bloc
+            ..add(const TaskEvent.deleteTask(tTaskId))
+            ..add(const TaskEvent.deleteTask(tTaskId));
         },
+        //! Assert
         wait: const Duration(milliseconds: 500),
         expect: () => [
           TaskState.initial(
@@ -518,6 +561,58 @@ void main() {
         ],
         verify: (_) {
           verify(() => mockDeleteTaskUseCase(tTaskId)).called(1);
+        },
+      );
+    });
+
+    group('closeTask', () {
+      final tTask = TestEntities.tTaskEntity;
+      const tTaskId = '2995104339';
+
+      blocTest<TaskBloc, TaskState>(
+        'emits [processing, success, idle] when closeTask succeeds',
+        seed: () => TaskState.initial(tasks: [tTask]),
+        build: () {
+          //! Arrange
+          when(
+            () => mockCloseTaskUseCase(any()),
+          ).thenAnswer((_) async => const Right(null));
+          when(
+            () => mockSaveAllTaskToStorageUseCase(any()),
+          ).thenAnswer((_) async => const Right(null));
+          return taskBloc;
+        },
+        //! Act
+        act: (bloc) => bloc.add(const TaskEvent.closeTask(tTaskId)),
+        //! Assert
+        verify: (_) {
+          verify(() => mockCloseTaskUseCase(tTaskId)).called(1);
+        },
+      );
+    });
+
+    group('reopenTask', () {
+      final tTask = TestEntities.tTaskEntity.copyWith(isCompleted: true);
+      const tTaskId = '2995104339';
+
+      blocTest<TaskBloc, TaskState>(
+        'emits [processing, success, idle] when reopenTask succeeds',
+        seed: () => TaskState.initial(tasks: [tTask]),
+        build: () {
+          //! Arrange
+          when(
+            () => mockReopenTaskUseCase(any()),
+          ).thenAnswer((_) async => const Right(null));
+          when(
+            () => mockSaveAllTaskToStorageUseCase(any()),
+          ).thenAnswer((_) async => const Right(null));
+          return taskBloc;
+        },
+        //! Act
+        act: (bloc) => bloc.add(const TaskEvent.reopenTask(tTaskId)),
+        //! Assert
+        verify: (_) {
+          verify(() => mockReopenTaskUseCase(tTaskId)).called(1);
         },
       );
     });

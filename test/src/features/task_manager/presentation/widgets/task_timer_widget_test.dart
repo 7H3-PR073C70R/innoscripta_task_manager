@@ -5,7 +5,6 @@ import 'package:innoscripta_task_manager/src/features/task_manager/presentation/
 
 import '../../../../../helpers/pump_app.dart';
 
-
 void main() {
   group('task timer widget ...', () {
     testWidgets('renders full timer by default', (tester) async {
