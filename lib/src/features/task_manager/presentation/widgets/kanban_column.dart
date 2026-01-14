@@ -189,17 +189,6 @@ class _KanbanColumnHeader extends StatelessWidget {
             constraints: const BoxConstraints(),
             tooltip: context.l10n.addTask,
           ),
-          const SizedBox(width: 4),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.more_horiz,
-              color: colors.gray[600],
-            ),
-            iconSize: 20,
-            padding: EdgeInsets.zero,
-            constraints: const BoxConstraints(),
-          ),
         ],
       ),
     );

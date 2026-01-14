@@ -121,7 +121,12 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         ),
       ),
       (task) {
-        final updatedTasks = [task, ...state.tasks];
+        final updatedTasks = [
+          task.copyWith(
+            status: event.request.status,
+          ),
+          ...state.tasks,
+        ];
         add(_SaveAllTaskToStorage(updatedTasks));
         emit(
           state.copyWith(

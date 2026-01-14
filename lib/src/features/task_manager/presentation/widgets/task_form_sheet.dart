@@ -6,6 +6,7 @@ import 'package:innoscripta_task_manager/src/core/themes/color/app_theme_colors.
 import 'package:innoscripta_task_manager/src/core/themes/typography/app_typography.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/create_task_entity.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_entity.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/presentation/blocs/label/label_bloc.dart';
 import 'package:innoscripta_task_manager/src/features/task_manager/presentation/widgets/label_section.dart';
 import 'package:innoscripta_task_manager/src/l10n/l10n.dart';
@@ -16,6 +17,7 @@ import 'package:innoscripta_task_manager/src/shared/wrapper/shrinkable_button.da
 Future<CreateTaskEntity?> showTaskForm(
   BuildContext context, {
   TaskEntity? task,
+  TaskStatus? status,
 }) async {
   final width = MediaQuery.of(context).size.width;
   final isMobile = width < 600;
@@ -25,7 +27,10 @@ Future<CreateTaskEntity?> showTaskForm(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => TaskFormSheet(task: task),
+      builder: (context) => TaskFormSheet(
+        task: task,
+        status: status,
+      ),
     );
   } else {
     return showDialog<CreateTaskEntity>(
@@ -34,7 +39,7 @@ Future<CreateTaskEntity?> showTaskForm(
         backgroundColor: Colors.transparent,
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600, maxHeight: 800),
-          child: TaskFormSheet(task: task, isDialog: true),
+          child: TaskFormSheet(task: task, isDialog: true, status: status),
         ),
       ),
     );
@@ -45,11 +50,13 @@ class TaskFormSheet extends StatefulWidget {
   const TaskFormSheet({
     this.task,
     this.isDialog = false,
+    this.status,
     super.key,
   });
 
   final TaskEntity? task;
   final bool isDialog;
+  final TaskStatus? status;
 
   @override
   State<TaskFormSheet> createState() => _TaskFormSheetState();
@@ -109,6 +116,7 @@ class _TaskFormSheetState extends State<TaskFormSheet> {
             ? num.tryParse(_durationController.text)
             : null,
         durationUnit: _durationUnit,
+        status: widget.status,
       );
 
       Navigator.of(context).pop(taskEntity);

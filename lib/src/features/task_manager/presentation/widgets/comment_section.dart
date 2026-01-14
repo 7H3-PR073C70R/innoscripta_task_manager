@@ -123,10 +123,12 @@ class _CommentSectionState extends State<CommentSection> {
                 return const Center(child: AnimatedLoader());
               }
               if (state.comments.isEmpty) {
-                return EmptyStateWidget(
-                  title: appString.noComments,
-                  description: appString.beTheFirstToComment,
-                  icon: Icons.chat_bubble_outline,
+                return SingleChildScrollView(
+                  child: EmptyStateWidget(
+                    title: appString.noComments,
+                    description: appString.beTheFirstToComment,
+                    icon: Icons.chat_bubble_outline,
+                  ),
                 );
               }
 

@@ -30,8 +30,8 @@ Future<void> bootstrap({
   required FutureOr<Widget> Function() builder,
   required Environment environment,
 }) async {
-  WidgetsFlutterBinding.ensureInitialized(); 
-  await ScreenUtil.ensureScreenSize(); 
+  WidgetsFlutterBinding.ensureInitialized();
+  await ScreenUtil.ensureScreenSize();
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };

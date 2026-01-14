@@ -1,10 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:innoscripta_task_manager/src/features/task_manager/domain/entity/task/task_status.dart';
 
 class CreateTaskEntity extends Equatable {
   const CreateTaskEntity({
     required this.id,
     required this.content,
     required this.description,
+    this.status,
     this.projectId,
     this.sectionId,
     this.parentId,
@@ -36,10 +38,12 @@ class CreateTaskEntity extends Equatable {
   final String? assigneeId;
   final num? duration;
   final String? durationUnit;
+  final TaskStatus? status;
   final DateTime? deadlineDate;
 
   @override
   List<Object?> get props => [
+    status,
     content,
     description,
     projectId,

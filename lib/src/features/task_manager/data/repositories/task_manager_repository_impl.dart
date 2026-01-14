@@ -1,5 +1,6 @@
 import 'dart:isolate';
 
+import 'package:flutter/foundation.dart';
 import 'package:innoscripta_task_manager/src/core/error/failure.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/repository_extension.dart';
 import 'package:innoscripta_task_manager/src/core/utils/either.dart';
@@ -78,9 +79,11 @@ class TaskManagerRepositoryImpl implements TaskManagerRepository {
       final localTasks = await _localDataSource.getAllActiveTaskFromStorage();
 
       // Offload the heavy merging logic to a separate Isolate
-      final hydratedTasks = await Isolate.run(() {
-        return _hydrateTasks(remoteTasks, localTasks);
-      });
+      final hydratedTasks = kIsWeb
+          ? _hydrateTasks(remoteTasks, localTasks)
+          : await Isolate.run(() {
+              return _hydrateTasks(remoteTasks, localTasks);
+            });
 
       // return hydratedTasks
       return Right(hydratedTasks.toList());

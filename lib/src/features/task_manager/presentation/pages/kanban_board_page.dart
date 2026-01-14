@@ -45,8 +45,11 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
     super.dispose();
   }
 
-  Future<void> _createTask() async {
-    final result = await showTaskForm(context);
+  Future<void> _createTask({TaskStatus? status}) async {
+    final result = await showTaskForm(
+      context,
+      status: status,
+    );
 
     if (result != null && mounted) {
       context.read<TaskBloc>().add(
@@ -193,7 +196,7 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                     inProgressTasks: inProgressTasks,
                     doneTasks: doneTasks,
                     onTaskMoved: _onTaskMoved,
-                    onAddTask: _createTask,
+                    onAddTask: (status) => _createTask(status: status),
                     onDragStarted: _handleDragStarted,
                     onDragEnded: _handleDragEnded,
                   );
@@ -205,7 +208,7 @@ class _KanbanBoardPageState extends State<KanbanBoardPage> {
                   inProgressTasks: inProgressTasks,
                   doneTasks: doneTasks,
                   onTaskMoved: _onTaskMoved,
-                  onAddTask: _createTask,
+                  onAddTask: (status) => _createTask(status: status),
                 );
               },
             );
@@ -229,7 +232,7 @@ class _DesktopKanbanBoard extends StatelessWidget {
   final List<TaskEntity> inProgressTasks;
   final List<TaskEntity> doneTasks;
   final void Function(TaskEntity, TaskStatus) onTaskMoved;
-  final VoidCallback onAddTask;
+  final void Function(TaskStatus) onAddTask;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +247,7 @@ class _DesktopKanbanBoard extends StatelessWidget {
               status: TaskStatus.todo,
               tasks: todoTasks,
               onTaskTap: (task) => context.go('/task/${task.id}'),
-              onAddTask: onAddTask,
+              onAddTask: () => onAddTask(TaskStatus.todo),
               onTaskMoved: onTaskMoved,
             ),
           ),
@@ -255,7 +258,7 @@ class _DesktopKanbanBoard extends StatelessWidget {
               status: TaskStatus.inProgress,
               tasks: inProgressTasks,
               onTaskTap: (task) => context.go('/task/${task.id}'),
-              onAddTask: onAddTask,
+              onAddTask: () => onAddTask(TaskStatus.inProgress),
               onTaskMoved: onTaskMoved,
             ),
           ),
@@ -266,7 +269,7 @@ class _DesktopKanbanBoard extends StatelessWidget {
               status: TaskStatus.done,
               tasks: doneTasks,
               onTaskTap: (task) => context.go('/task/${task.id}'),
-              onAddTask: onAddTask,
+              onAddTask: () => onAddTask(TaskStatus.done),
               onTaskMoved: onTaskMoved,
             ),
           ),
@@ -293,7 +296,7 @@ class _MobileKanbanBoard extends StatelessWidget {
   final List<TaskEntity> inProgressTasks;
   final List<TaskEntity> doneTasks;
   final void Function(TaskEntity, TaskStatus) onTaskMoved;
-  final VoidCallback onAddTask;
+  final void Function(TaskStatus) onAddTask;
   final VoidCallback onDragStarted;
   final VoidCallback onDragEnded;
 
@@ -313,7 +316,7 @@ class _MobileKanbanBoard extends StatelessWidget {
               status: TaskStatus.todo,
               tasks: todoTasks,
               onTaskTap: (task) => context.go('/task/${task.id}'),
-              onAddTask: onAddTask,
+              onAddTask: () => onAddTask(TaskStatus.todo),
               onTaskMoved: onTaskMoved,
               onDragStarted: onDragStarted,
               onDragEnded: onDragEnded,
@@ -327,7 +330,7 @@ class _MobileKanbanBoard extends StatelessWidget {
               status: TaskStatus.inProgress,
               tasks: inProgressTasks,
               onTaskTap: (task) => context.go('/task/${task.id}'),
-              onAddTask: onAddTask,
+              onAddTask: () => onAddTask(TaskStatus.inProgress),
               onTaskMoved: onTaskMoved,
               onDragStarted: onDragStarted,
               onDragEnded: onDragEnded,
@@ -341,7 +344,7 @@ class _MobileKanbanBoard extends StatelessWidget {
               status: TaskStatus.done,
               tasks: doneTasks,
               onTaskTap: (task) => context.go('/task/${task.id}'),
-              onAddTask: onAddTask,
+              onAddTask: () => onAddTask(TaskStatus.done),
               onTaskMoved: onTaskMoved,
               onDragStarted: onDragStarted,
               onDragEnded: onDragEnded,

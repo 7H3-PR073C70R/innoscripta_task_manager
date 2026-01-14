@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/num_extension.dart';
 import 'package:innoscripta_task_manager/src/core/extensions/theme_extension.dart';
@@ -55,7 +55,7 @@ class AppButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius.radius),
         ),
         child: isBusy
-            ? Platform.isAndroid
+            ? kIsWeb
                   ? CircularProgressIndicator(
                       color: textColor ?? context.colors.accent,
                     )
@@ -70,7 +70,7 @@ class AppButton extends StatelessWidget {
                 style:
                     textStyle ??
                     context.textTheme.subHeading.copyWith(
-                      fontSize: 14.fontSize,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
