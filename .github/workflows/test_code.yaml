@@ -21,7 +21,7 @@ jobs:
 
   check-spelling:
     name: Check for Spelling Errors
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@f4ce8ee62da0c6dbd36c94fcf8fb635ecdcc97fb
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/spell_check.yml@408be27bbee549a761d0bec9f160547e198d09ec
     with:
       includes: |
         **/*.md
