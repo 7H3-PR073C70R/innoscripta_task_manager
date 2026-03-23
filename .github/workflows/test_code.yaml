@@ -17,7 +17,7 @@ on:
 jobs:
   check-semantic-pr:
     name: Check for Semantic Commits Structure
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@f4ce8ee62da0c6dbd36c94fcf8fb635ecdcc97fb
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/semantic_pull_request.yml@6ec6b7a318a4032aa7d5c86c6bee2033c45ba54a
 
   check-spelling:
     name: Check for Spelling Errors
